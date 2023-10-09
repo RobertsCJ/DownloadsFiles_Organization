@@ -1,21 +1,52 @@
 import os
-#os.path.expanduser() ver a pasta home usuario
-#os.system(pwd) atual diretorio 
+from time import sleep
+
+if os.name == 'posix':
+	if os.path.isdir(os.getenv('HOME') + '/Downloads'): #linux
+		path = os.getenv('HOME') #usuario??
+	elif os.path.isdir(os.getenv('HOME') + '/storage/'): #android
+		path = os.getenv('HOME') + '/storage/shared'
+
+
+os.chdir(path); print(os.listdir())
+for dir in os.listdir():
+	if 'doc' in dir.lower():
+		docs = (os.path.abspath(dir)) #doc = pathToDoc
+	elif ('picture' or 'image') in dir.lower():
+		pics = (os.path.abspath(dir))
+	elif ('movies' or 'videos') in dir.lower():
+                videos = (os.path.abspath(dir))
+	elif 'proje' in dir.lower():
+		projects = (os.path.abspath(dir))
+	elif ('music' or 'audio') in dir.lower():
+		musics = os.path.abspath(dir)
+	elif 'download' in dir.lower():
+                downloads = (os.path.abspath(dir))
+
+
+print(downloads, docs, pics, videos, musics)
+
+
 def replace_downloads():
-	print('O sistema de pastas esta ativo...')
+	print('O sistema esta ativo...')
 	while True:
-		for file in os.listdir('downloads'): 
-			tipo = file[file.index('.'):]
-			if tipo  in '.jpg.png':
-				os.replace(f'/data/data/com.termux/files/home/storage/termux/file-move/downloads/{file}', f'/data/data/com.termux/files/home/storage/termux/file-move/pictures/{file}')
-			elif tipo in '.mp3.wav':
-				os.replace(f'/data/data/com.termux/files/home/storage/termux/file-move/downloads/{file}', f'/data/data/com.termux/files/home/storage/termux/file-move/musics/{file}')
-			elif tipo in '.mp4.mkv.m4a':
-				os.replace(f'/data/data/com.termux/files/home/storage/termux/file-move/downloads/{file}', f'/data/data/com.termux/files/home/storage/termux/file-move/videos/{file}')
+		for file in os.listdir(downloads): 
+			tipo = file[file.rfind('.'):]
+
+			if tipo  in '.jpg.png.gif.':
+				os.replace(f'{downloads}/{file}', f'{pics}/{file}')
+
+			elif tipo in '.mp3.wav.m4a.opus':
+				os.replace(f'{downloads}/{file}', f'{musics}/{file}')
+			elif tipo in '.mp4.mkv':
+				os.replace(f'/{downloads}/{file}', f'{videos}/{file}')
 			elif tipo in '.html.js.css.py.jar':
-				os.replace(f'/data/data/com.termux/files/home/storage/termux/file-move/downloads/{file}', f'/data/data/com.termux/files/home/storage/termux/file-move/projects/{file}')
+				if file != 'main.py': 
+					if os.path.exists('Projects'):
+						os.replace(f'{downloads}/{file}', f'{projects}/{file}')
+					else:
+						os.replace(f'{downloads}/{file}', f'{docs}/{file}')
 			elif tipo in '.docx.pdf.odf.odt.doc.csv':
-				os.replace(f'/data/data/com.termux/files/home/storage/termux/file-move/downloads/{file}', f'/data/data/com.termux/files/home/storage/termux/file-move/docs/{file}')
-			#os.replace(f'/data/data/com.termux/files/home/storage/termux/file-move/downloads/{file}', f'/data/data/com.termux/files/home/storage/termux/file-move/pictures/{file}')
-		break ##por enquanto
+				os.replace(f'{downloads}/{file}', f'{docs}/{file}')
+		break
 replace_downloads()

@@ -1,0 +1,5 @@
+import os
+
+caminho = os.system('pwd')
+print(caminho)
+os.replace(os.system('pwd') + 'downloads', str(caminho) + 'files')
